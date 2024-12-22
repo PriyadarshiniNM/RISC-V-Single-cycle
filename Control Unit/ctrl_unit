@@ -1,0 +1,79 @@
+module ctrl_unit(
+    input Zero, op5, funct7,
+    input [6:0] op,
+    input [2:0] funct3,
+    output reg RegWrite, MemWrite, ResultSrc, ALUSrc, PCSrc,
+    output reg [1:0] ImmSrc, ALUOp,
+    output reg [2:0] ALUControl
+);
+
+    localparam [6:0] LW = 7'b0000011, SW = 7'b0100011, R_TYPE = 7'b0110011, BEQ = 7'b1100011;
+    localparam [2:0] ADD = 3'b000, SUB = 3'b001, SLT = 3'b101, ORR = 3'b011, ANDD = 3'b010; //(ANDD - AND Gate)
+
+    always @(Zero, op5, funct7, op) begin
+        // Main Decoder Logic
+        case (op)
+            LW: begin
+                RegWrite = 1'b1;
+                MemWrite = 1'b0;
+                ResultSrc = 1'b1;
+                ALUSrc = 1'b1;
+                ImmSrc = 2'b00;
+                ALUOp = 2'b00;
+                PCSrc = 1'b0;
+            end
+            SW: begin
+                RegWrite = 1'b0;
+                MemWrite = 1'b1;
+                ResultSrc = 1'b0;
+                ALUSrc = 1'b1;
+                ImmSrc = 2'b01;
+                ALUOp = 2'b00;
+                PCSrc = 1'b0;
+            end
+            R_TYPE: begin
+                RegWrite = 1'b1;
+                MemWrite = 1'b0;
+                ResultSrc = 1'b0;
+                ALUSrc = 1'b0;
+                ImmSrc = 2'b00;
+                ALUOp = 2'b10;
+                PCSrc = 1'b0;
+            end
+            BEQ: begin
+                RegWrite = 1'b0;
+                MemWrite = 1'b0;
+                ResultSrc = 1'b0;
+                ALUSrc = 1'b0;
+                ImmSrc = 2'b10;
+                ALUOp = 2'b01;
+                PCSrc = Zero; // Branch if Zero is true
+            end
+            default: begin
+                RegWrite = 1'b0;
+                MemWrite = 1'b0;
+                ResultSrc = 1'b0;
+                ALUSrc = 1'b0;
+                ImmSrc = 2'b00;
+                ALUOp = 2'b00;
+                PCSrc = 1'b0;
+            end
+        endcase
+
+        // ALU Decoder Logic
+        case (ALUOp)
+            2'b00: ALUControl = ADD; // lw/sw: always add
+            2'b01: ALUControl = SUB; // beq: subtract
+            2'b10: begin // R-type instructions
+                case (funct3)
+                    3'b000: ALUControl = (funct7 && op5) ? SUB : ADD; // ADD/SUB based on funct7
+                    3'b010: ALUControl = SLT; // Set less than
+                    3'b110: ALUControl = ORR; // OR
+                    3'b111: ALUControl = ANDD; // AND
+                    default: ALUControl = ADD; // Default to ADD
+                endcase
+            end
+            default: ALUControl = ADD; // Default to ADD
+        endcase
+    end
+endmodule
