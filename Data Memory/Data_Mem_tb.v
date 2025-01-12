@@ -11,6 +11,8 @@ module Data_Mem_tb();
     end
 
     initial begin
+        rst = 1; #10;
+        rst = 0;
         WE = 0;  A = 0;  WD = 0;
         #10;
         A = 10;  WD = 32'hDEADBEEF;  WE = 1; #10;

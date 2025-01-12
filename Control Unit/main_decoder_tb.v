@@ -23,6 +23,6 @@ module main_decoder_tb;
         // Test Case 5: beq (Branch if Equal, Zero = 1)
         op = 7'b1100011; Zero = 1; #10;
         
-        $finsih;
+        $finish;
     end
 endmodule

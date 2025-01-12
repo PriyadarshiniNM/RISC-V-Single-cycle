@@ -8,7 +8,7 @@ module ALU (
     reg cout;
     reg [31:0] B_comp;  // Complement of B for subtraction or SLT
 
-    always @(*) begin
+    always @(A, B, ALUControl) begin
         // Precompute B complement for subtraction and SLT
         B_comp = (ALUControl == 3'b001) ? ~B + 1 : B;
 
