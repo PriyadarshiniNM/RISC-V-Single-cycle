@@ -1,9 +1,9 @@
-module Instru_Mem_tb;
+module Instr_Mem_tb;
     reg [31:0] PC;
     reg rst;
     wire [31:0] RD;
 
-    Instru_Mem uut (.PC(PC), .rst(rst), .RD(RD););
+    Instr_Mem uut (.PC(PC), .rst(rst), .RD(RD););
 
     initial 
     begin

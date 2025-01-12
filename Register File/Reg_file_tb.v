@@ -1,11 +1,7 @@
-`timescale 1ns / 1ps
-
-module Reg_file_tb;
-
+module Reg_file_tb();
     reg clk, rst, WE3;
     reg [4:0] A1, A2, A3;
     reg [31:0] WD3;
-
     wire [31:0] RD1, RD2;
 
     Reg_file uut (.clk(clk), .rst(rst), .WE3(WE3), .A1(A1), .A2(A2), 
@@ -26,18 +22,18 @@ module Reg_file_tb;
         A3 = 5'd1;
         WD3 = 32'h12345678;
         WE3 = 1;
-        #10;
+        #10
         
         // Read from register 1
         A1 = 5'd1;
         WE3 = 0;
-        #10;
+        #10
 
         // Write to register 2
         A3 = 5'd2;
         WD3 = 32'h87654321;
         WE3 = 1;
-        #10;
+        #10
 
         // Read from register 2
         A2 = 5'd2;
@@ -45,16 +41,12 @@ module Reg_file_tb;
         #10;
 
         // Check reading from zero register
-        A1 = 5'd0;
-        A2 = 5'd0;
+        A1 = 5'd0;A2 = 5'd0;
         #10;
 
         // Test reset functionality again
         rst = 1;
-        #10;
-        rst = 0;
-        #10;
-
-        $finish;
+        #10 rst = 0;
+        #10 $finish;
     end
 endmodule
