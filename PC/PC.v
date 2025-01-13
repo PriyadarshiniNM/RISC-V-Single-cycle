@@ -1,13 +1,13 @@
-module PC(PCNext, PC, rst, clk);
+module PC(PCNext, pc, rst, clk);
     input [31:0] PCNext;
     input clk, rst;
-    output reg [31:0] PC;
+    output reg [31:0] pc;
 
     always @(posedge clk, posedge rst)
     begin
         if (rst)    
-            PC <= 32'h00000000;
+            pc <= 32'h00000000;
         else   
-            PC <= PCNext;
+            pc <= PCNext;
     end
 endmodule

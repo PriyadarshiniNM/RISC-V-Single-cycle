@@ -11,7 +11,7 @@ module ALU_decoder(
     // Concatenation of op5 and funct7 into a 2-bit signal
     assign concat = {op5, funct7};
 
-    always @(op5. funct7, funct3, ALUOp) begin
+    always @(op5, funct7, funct3, ALUOp) begin
         case (ALUOp)
             lw_sw: ALUControl = add;                // Load/Store operations use addition
             beq: ALUControl = sub;                  // Branch instructions use subtraction

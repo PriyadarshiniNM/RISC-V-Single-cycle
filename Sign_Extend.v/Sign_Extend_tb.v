@@ -1,42 +1,32 @@
 module Sign_Extend_tb;
 
-    reg [24:0] In;
+    reg [31:0] In;
+    reg [1:0] ImmSrc;
     wire [31:0] Imm_Ext;
 
     Sign_Extend uut (
         .In(In),
+        .ImmSrc(ImmSrc),
         .Imm_Ext(Imm_Ext)
     );
 
     initial begin
-        // Test case 1: Zero input
-        In = 25'b0000000000000000000000000;
-        #10;
+        In = 32'b0;
+        ImmSrc = 2'b00;
 
-        // Test case 2: Positive input (LSB 0)
-        In = 25'b0000000000000000000000010;
-        #10;
+        // Test case 1: Immediate from I-type instruction (ImmSrc = 2'b00)
+        #10 In = 32'b00000000000000000001010101011010; ImmSrc = 2'b00; // Test with positive number
+        #10 In = 32'b11111111111111111111111111100000; ImmSrc = 2'b00; // Test with negative number
 
-        // Test case 3: Positive input (MSB 0)
-        In = 25'b0111111111111111111111111;
-        #10;
+        // Test case 2: Immediate from S-type instruction (ImmSrc = 2'b01)
+        #10 In = 32'b00000000000000000011010101011010; ImmSrc = 2'b01; // Test with positive number
+        #10 In = 32'b11111111111111111100111111100000; ImmSrc = 2'b01; // Test with negative number
 
-        // Test case 4: Negative input (MSB 1)
-        In = 25'b1111111111111111111111111;
-        #10;
+        // Test case 3: Immediate from B-type instruction (ImmSrc = 2'b10)
+        #10 In = 32'b00000000000000000000010101011010; ImmSrc = 2'b10; // B-type (should be same as S-type for this case)
+        #10 In = 32'b11111111111111111110111111100000; ImmSrc = 2'b10; // B-type with negative number
 
-        // Test case 5: Negative input with non-zero lower bits
-        In = 25'b1000000000000000000000001;
-        #10;
-
-        // Test case 6: Middle range input
-        In = 25'b0000000111111111111111111;
-        #10;
-
-        // Test case 7: Another negative input
-        In = 25'b1000000000000000000000010;
-        #10;
-
-        $finish;
+        #10 $finish;
     end
+
 endmodule

@@ -1,19 +1,12 @@
-module control_unit(
-    input Zero,
+module Control_Unit_Top(
+    input Zero, op5, funct7,
     input [6:0] op,
     input [2:0] funct3,
-    input op5,
-    input funct7,
-    output RegWrite,
-    output MemWrite,
-    output ResultSrc,
-    output ALUSrc,
-    output PCSrc,
+    output RegWrite, MemWrite, ResultSrc, ALUSrc, PCSrc,
     output [1:0] ImmSrc,
     output [2:0] ALUControl
 );
 
-    // Internal signals
     wire [1:0] ALUOp;
 
     main_decoder u_main_decoder (

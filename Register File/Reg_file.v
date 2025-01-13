@@ -30,4 +30,10 @@ module Reg_file (
         end
     end
 
+    initial begin
+        Register[5] = 32'h00000005;
+        Register[6] = 32'h00000004;
+        
+    end
+
 endmodule
